@@ -1,0 +1,25 @@
+{
+  "name": "clickify",
+  "version": "1.0.0",
+  "description": "The Backend API for the Clickify: An open source URL Shortner",
+  "main": "main.js",
+  "author": "raxraj",
+  "license": "ISC",
+  "private": false,
+  "scripts": {
+    "devStart": "nodemon main.js",
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.0",
+    "shortid": "^2.2.16"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
