@@ -15,7 +15,6 @@ let ShortURLSchema = new Schema({
     },
     customBackPart: {
         type: String,
-        required: false,
     },
     numberOfVisits: {
         type: Number,

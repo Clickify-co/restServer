@@ -3,10 +3,11 @@ const router = require('express').Router()
 // Import Models
 const ShortURLs = require('../models/ShortURL')
 const Users = require('../models/User')
-const { isAuthenticated } = require('../functions/authFunctions')
 
 // Import Functions
 const { validateAddNewShortURLData } = require('../functions/validations')
+const { isAuthenticated } = require('../functions/authFunctions')
+
 
 // Middlewares
 function addNewShortURLValidation(request, response, next) {
@@ -28,11 +29,19 @@ router.get('/', isAuthenticated, (request, response) => {
             if (foundUser) {
                 ShortURLs.find({ _id: { $in: foundUser.urls } })
                     .then(allURLsOfUser => {
-                        console.log(allURLsOfUser);
                         foundUser.urls = allURLsOfUser
                         response.send({ done: true, userData: foundUser })
                     })
+                    .catch(err => {
+                        response.send({ done: false, errorType: 'mongoDB', errorObject: err })
+                    })
             }
+            else {
+                response.send({ done: false, errorType: 'accessDenied', errorObject: { reason: 'invalidPayloadWithToken' } })
+            }
+        })
+        .catch(err => {
+            response.send({ done: false, errorType: 'mongoDB', errorObject: err })
         })
 })
 
@@ -70,6 +79,33 @@ router.post('/addNewShortURL', isAuthenticated, addNewShortURLValidation, (reque
         .catch(err => {
             response.send({ done: false, errorType: 'mongoDB', errorObject: err })
         })
+})
+
+router.post('/editShortURL', isAuthenticated, (request, response) => {
+    let { shortURL, customBackPart } = request.body
+
+    ShortURLs.findOne({ customBackPart: customBackPart }).then((foundURL) => {
+        if (!foundURL) {
+            ShortURLs.findOneAndUpdate({ shortURL: shortURL }, { customBackPart: customBackPart }, { new: true, context: 'query', runValidators: true })
+                .then(editedShortURL => {
+                    if (editedShortURL.customBackPart == customBackPart) {
+                        response.send({ done: true })
+                    }
+                    else if (!editedShortURL) {
+                        response.send({ done: false, errorType: 'entityDoesNotExist', errorObject: { entityNotFound: 'shortURL' } })
+                    }
+                    else {
+                        response.send({ done: false, errorType: 'unknownError', errorObject: {} })
+                    }
+                })
+                .catch(err => {
+                    response.send({ done: false, errorType: 'mongoDB', errorObject: err })
+                })
+        }
+        else {
+            response.send({ done: false, errorType: 'existingEntity', errorObject: { existingProperty: 'customBackPart' } })
+        }
+    })
 })
 
 module.exports = router
