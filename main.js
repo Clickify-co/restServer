@@ -2,13 +2,14 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 // Setting up the Application
 const app = express()
 dotenv.config()
 
 // Connecting to MongoDB with URI process.env.MONGO_DB_URI
-let mongooseConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }
+let mongooseConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true }
 function callbackToMongooseConnect(err) {
     if (err) return console.error(`Unexpected Error Occured ${err}`);
     return console.log('Connected to MongoDB Cloud')
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGO_DB_URI, mongooseConnectionOptions, callbackTo
 
 // Setting up Middleware
 app.use(express.json())
+app.use(cors())
 
 // Setting up routes
 app.use('/', require('./routes/baseRoutes'))

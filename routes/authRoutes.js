@@ -2,6 +2,7 @@
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
 
+
 // Import Models
 const Users = require('../models/User')
 
@@ -9,7 +10,6 @@ const Users = require('../models/User')
 const { validateRegistrationData, validateLoginAuthenticationData } = require('../functions/validations')
 const { generateToken } = require('../functions/jwtFunctions.js')
 const { isUnAuthenticated } = require('../functions/authFunctions')
-const { validate } = require('../models/User')
 
 
 // Middleware Functions Go here
