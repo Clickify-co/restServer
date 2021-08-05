@@ -39,7 +39,7 @@ function registerValidation(request, response, next) {
  */
 function loginAuthenticationValidation(request, response, next) {
     let validation = validateLoginAuthenticationData(request.body)
-    if (validate.error) {
+    if (validation.error) {
         response.send({ done: false, errorType: 'validation', errorObject: validation.error })
     }
     else {
