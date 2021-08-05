@@ -108,4 +108,19 @@ router.post('/editShortURL', isAuthenticated, (request, response) => {
     })
 })
 
+router.post('/deleteShortURL', isAuthenticated, (request, response) => {
+    let { id } = request.body
+
+    ShortURLs.findOneAndDelete({ _id: id })
+        .then(editedShortURL => {
+            if (!editedShortURL) {
+                response.send({ done: false, errorType: 'entityDoesNotExist', errorObject: { entityNotFound: 'shortURL' } })
+            }
+            response.send({ done: true })
+        })
+        .catch(err => {
+            response.send({ done: false, errorType: 'mongoDB', errorObject: err })
+        })
+})
+
 module.exports = router

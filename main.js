@@ -9,7 +9,7 @@ const app = express()
 dotenv.config()
 
 // Connecting to MongoDB with URI process.env.MONGO_DB_URI
-let mongooseConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true }
+let mongooseConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 function callbackToMongooseConnect(err) {
     if (err) return console.error(`Unexpected Error Occured ${err}`);
     return console.log('Connected to MongoDB Cloud')
